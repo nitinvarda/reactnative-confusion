@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Switch, Button, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Switch, Button, ScrollView, Modal, } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { Card } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,8 +9,14 @@ const Reservation = () => {
     const [guests, setGuests] = useState(1)
     const [smoking, setSmoking] = useState(false)
     const [date, setDate] = useState('2016-01-01')
+    const [showModal, setShowModal] = useState(false)
 
+    const toggleModal = () => {
+        setShowModal(!showModal)
+
+    }
     const handleReservation = () => {
+        toggleModal()
         console.log({ guests, smoking });
         setGuests(1)
         setSmoking(false)
@@ -75,6 +81,26 @@ const Reservation = () => {
                     accessibilityLabel="Learn more about this purple button"
                 />
             </View>
+            <Modal
+                animationType={'slide'}
+                transparent={true}
+                visible={showModal}
+                onDismiss={() => toggleModal()}
+                onRequestClose={() => toggleModal()}
+
+            >
+                <View style={styles.modal}>
+                    <Text style={styles.moadalTitle}>
+                        Your Reservation
+                    </Text>
+                    <Text style={styles.modalText}>
+                        Number of Guests:{guests}
+                    </Text>
+                    <Text style={styles.modalText}>Smoking:{smoking}</Text>
+                    <Text style={styles.modalText}>Date :{date}</Text>
+                    <Button color="#512AD8" title="Close" onPress={() => { toggleModal() }} />
+                </View>
+            </Modal>
         </ScrollView>
     )
 }
@@ -95,6 +121,23 @@ const styles = StyleSheet.create({
     },
     formItem: {
         flex: 1
+    },
+    modal: {
+        justifyContent: 'center',
+        margin: 20,
+
+    },
+    moadalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: '#512AD8',
+        textAlign: 'center',
+        color: 'white',
+        marginBottom: 20
+    },
+    modalText: {
+        fontSize: 18,
+        margin: 10
     }
 });
 

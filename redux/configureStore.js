@@ -17,7 +17,7 @@ export const configureStore = () => {
             favorites
 
         }),
-        applyMiddleware(thunk, logger)
+        applyMiddleware(thunk)
     )
 
     return store

@@ -12,6 +12,11 @@ export const comments = (state = initialState, action) => {
                 ...state,
                 isLoading: true
             }
+        case ActionTypes.ADD_COMMENT:
+
+            action.payload.id = state.comments.length + 1;
+            return { ...state, errMsg: null, comments: state.comments.concat(action.payload) };
+
         case ActionTypes.ADD_COMMENTS:
             return {
                 ...state,

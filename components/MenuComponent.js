@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native'
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { Tile } from 'react-native-elements'
 import { Loading } from './LoadingComponent';
+import { Tile } from 'react-native-elements'
 
 class MenuComponent extends Component {
     constructor(props) {

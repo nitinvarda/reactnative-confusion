@@ -23,6 +23,7 @@ export const dishes = (state = initialState, action) => {
                 ...state,
                 errMess: action.payload
             }
+
         default:
             return state
     }

@@ -12,7 +12,7 @@ import { ScrollView, SafeAreaView, View, Text, Image, StyleSheet } from 'react-n
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import { connect } from 'react-redux'
 import Reservation from './Reservation'
-
+import Favorites from './FavoriteComponent';
 
 const MenuNavigator = createStackNavigator({
     Menu: {
@@ -88,6 +88,27 @@ const ContactNavigator = createStackNavigator({
 
 }, {
     initialRouteName: 'Contact',
+    navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgorundColor: '#512DA8'
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+            color: '#000'
+        },
+        headerLeft: <Icon name='menu' size={24}
+            color='black'
+            onPress={() => navigation.toggleDrawer()}
+        />
+    })
+
+})
+
+const FavoritesNavigator = createStackNavigator({
+    Favorites: Favorites
+
+}, {
+    initialRouteName: 'Favorites',
     navigationOptions: ({ navigation }) => ({
         headerStyle: {
             backgorundColor: '#512DA8'
@@ -198,6 +219,22 @@ const MainNavigator = createDrawerNavigator({
                     color={tintColor}
                 />
             )
+        }
+
+    },
+    Favorites: {
+        screen: FavoritesNavigator,
+        navigationOptions: {
+            title: 'My Favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({ tintColor }) => (
+                <Icon
+                    name='heart'
+                    type='font-awesome'
+                    size={24}
+                    iconStyle={{ color: tintColor }}
+                />
+            ),
         }
 
     },

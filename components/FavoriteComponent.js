@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, StyleSheet, Text, FlatList, View } from 'react-native'
+import { Animated, StyleSheet, Text, FlatList, View, Alert } from 'react-native'
 import { ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -11,25 +11,25 @@ import Swipeout from 'react-native-swipeout'
 
 
 class FavoriteComponent extends Component {
-    renderLeftActions = (progress, dragX) => {
-        const trans = dragX.interpolate({
-            inputRange: [0, 50, 100, 101],
-            outputRange: [-20, 0, 0, 1],
-        });
-        return (
-            <RectButton style={styles.leftAction} onPress={this.close}>
-                <Animated.Text
-                    style={[
-                        styles.actionText,
-                        {
-                            transform: [{ translateX: trans }],
-                        },
-                    ]}>
-                    Archive
-            </Animated.Text>
-            </RectButton>
-        );
-    };
+    // renderLeftActions = (progress, dragX) => {
+    //     const trans = dragX.interpolate({
+    //         inputRange: [0, 50, 100, 101],
+    //         outputRange: [-20, 0, 0, 1],
+    //     });
+    //     return (
+    //         <RectButton style={styles.leftAction} onPress={this.close}>
+    //             <Animated.Text
+    //                 style={[
+    //                     styles.actionText,
+    //                     {
+    //                         transform: [{ translateX: trans }],
+    //                     },
+    //                 ]}>
+    //                 Archive
+    //         </Animated.Text>
+    //         </RectButton>
+    //     );
+    // };
     render() {
 
         const { navigate } = this.props.navigation
@@ -37,7 +37,25 @@ class FavoriteComponent extends Component {
             const rightButton = [{
                 text: 'Delete',
                 type: 'delete',
-                onPress: () => this.props.deleteFavorite(item.id)
+                onPress: () => {
+                    Alert.alert(
+                        'Delete Favorite?',
+                        'Are you sure you want to delete Favorite dish ' + item.name + '?',
+                        [
+                            {
+                                text: 'Cancel', onPress: () => console.log(item.name + 'Not Deleted'),
+                                style: 'cancel'
+                            },
+                            {
+                                text: 'OK',
+                                onPress: () => this.props.deleteFavorite(item.id)
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+
+
+                }
 
             }]
             return (

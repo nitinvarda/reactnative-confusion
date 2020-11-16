@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Animated, StyleSheet, Text, FlatList, View, Alert } from 'react-native'
+import { Animated, Easing, StyleSheet, Text, FlatList, View, Alert } from 'react-native'
 import { ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 import { deleteFavorite } from '../redux/ActionCreators'
-// import { RectButton } from 'react-native-gesture-handler'
-// import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Swipeout from 'react-native-swipeout'
+import * as Animatable from 'react-native-animatable'
 
 
 class FavoriteComponent extends Component {
@@ -60,11 +59,14 @@ class FavoriteComponent extends Component {
             }]
             return (
                 <Swipeout right={rightButton} autoClose={true} >
-                    <ListItem key={index} onPress={() => navigate('Dish', { dishId: item.id })}>
-                        <ListItem.Title>{item.name}</ListItem.Title>
-                        <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-                        <Avatar source={{ uri: baseUrl + item.image }} />
-                    </ListItem>
+                    <Animatable.View animation='fadeInRightBig' duration={2000} >
+                        <ListItem key={index} onPress={() => navigate('Dish', { dishId: item.id })}>
+                            <ListItem.Title>{item.name}</ListItem.Title>
+                            <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+
+                            <Avatar source={{ uri: baseUrl + item.image }} />
+                        </ListItem>
+                    </Animatable.View>
                 </Swipeout>
             )
         }

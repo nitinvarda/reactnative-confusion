@@ -1,44 +1,85 @@
 import React, { Component, useState } from 'react'
-import { FlatList, Modal, ScrollView, Text, View, StyleSheet, Button } from 'react-native';
+import { FlatList, Modal, ScrollView, Text, View, StyleSheet, Button, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Rating } from 'react-native-elements'
 
 import { connect } from 'react-redux'
 import { baseUrl } from '../shared/baseUrl';
 import { postComment, postFavorite } from '../redux/ActionCreators';
 import { TextInput } from 'react-native-gesture-handler';
+import * as Animatable from 'react-native-animatable'
+
 
 const RenderDish = (props) => {
 
     const dish = props.dish;
+
+
+    const recognizeDrag = ({ moveX, moveY, dy, dx }) => {
+        if (dx < -200) {
+            return true
+        }
+        else {
+            return false
+        }
+
+    }
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => {
+            return true
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            if (recognizeDrag(gestureState))
+                Alert.alert(
+                    'Add to Favorites ?',
+                    'Are you sure you want to add' + dish.name + 'to favorites ? ',
+                    [
+                        {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel pressed'),
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'Ok',
+                            onPress: () => props.favorite ? console.log('Already favorite') : props.onPress()
+
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            return true
+        }
+    })
     if (dish != null) {
         return (
-            <Card>
-                <Card.Title>{dish.name}</Card.Title>
+            <Animatable.View animation='fadeInDown' duration={2000} delay={1000} {...panResponder.panHandlers}>
+                <Card>
+                    <Card.Title>{dish.name}</Card.Title>
 
-                <Card.Image source={{ uri: baseUrl + dish.image }} />
+                    <Card.Image source={{ uri: baseUrl + dish.image }} />
 
-                <Text style={{ margin: 10 }}>
-                    {dish.description}
-                </Text>
-                <View style={styles.icons}>
+                    <Text style={{ margin: 10 }}>
+                        {dish.description}
+                    </Text>
+                    <View style={styles.icons}>
 
-                    <Icon
-                        raised
-                        reverse
-                        name={props.favorite ? 'heart' : 'heart-o'}
-                        type='font-awesome'
-                        color='#f50'
-                        onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
-                    />
-                    <Icon raised reverse
-                        name='pencil'
-                        type='font-awesome'
-                        color='#512AD8'
-                        onPress={props.toggleModal} />
-                </View>
+                        <Icon
+                            raised
+                            reverse
+                            name={props.favorite ? 'heart' : 'heart-o'}
+                            type='font-awesome'
+                            color='#f50'
+                            onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
+                        />
+                        <Icon raised reverse
+                            name='pencil'
+                            type='font-awesome'
+                            color='#512AD8'
+                            onPress={props.toggleModal} />
+                    </View>
 
 
-            </Card>
+                </Card>
+            </Animatable.View>
         )
     }
     else {
@@ -63,16 +104,18 @@ const RenderComments = (props) => {
 
     }
     return (
-        <Card  >
-            <Card.Title>Comments</Card.Title>
-            <FlatList data={comments}
-                renderItem={RenderCommentsItem}
-                keyExtractor={item => item.id.toString()}
-            />
+        <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+            <Card  >
+                <Card.Title>Comments</Card.Title>
+                <FlatList data={comments}
+                    renderItem={RenderCommentsItem}
+                    keyExtractor={item => item.id.toString()}
+                />
 
 
 
-        </Card>
+            </Card>
+        </Animatable.View>
 
     )
 }

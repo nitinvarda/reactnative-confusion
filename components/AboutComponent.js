@@ -5,6 +5,7 @@ import { Card, ListItem, Avatar } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 const Histroy = () => {
     return (
@@ -49,14 +50,16 @@ class About extends Component {
         else {
             return (
                 <ScrollView >
-                    <Histroy />
-                    <Card>
-                        <Card.Title>Corporate Leadership</Card.Title>
-                        <Card.Divider />
-                        <FlatList data={this.props.leaders.leaders}
-                            renderItem={renderMenuItem}
-                            keyExtractor={item => item.id.toString()} />
-                    </Card>
+                    <Animatable.View animation='fadeInDown' duration={2000} delay={1000}>
+                        <Histroy />
+                        <Card>
+                            <Card.Title>Corporate Leadership</Card.Title>
+                            <Card.Divider />
+                            <FlatList data={this.props.leaders.leaders}
+                                renderItem={renderMenuItem}
+                                keyExtractor={item => item.id.toString()} />
+                        </Card>
+                    </Animatable.View>
 
 
                 </ScrollView>

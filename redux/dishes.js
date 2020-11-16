@@ -16,7 +16,8 @@ export const dishes = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                dishes: action.payload
+                dishes: action.payload,
+                errMess: null
             }
         case ActionTypes.DISHES_FAILED:
             return {

@@ -21,7 +21,8 @@ export const comments = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                comments: action.payload
+                comments: action.payload,
+                errMess: null
             }
         case ActionTypes.COMMENTS_FAILED:
             return {

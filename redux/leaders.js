@@ -17,7 +17,8 @@ export const leaders = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                leaders: action.payload
+                leaders: action.payload,
+                errMess: null
             }
         case ActionTypes.LEADERS_FAILED:
             return {

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Switch, Button, ScrollView, Modal, } from 'react-native'
+import { StyleSheet, Text, View, Switch, Button, ScrollView, Modal, Alert } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { Card } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker'
+import * as Animatable from 'react-native-animatable'
 
 const Reservation = () => {
     const [guests, setGuests] = useState(1)
@@ -15,41 +16,60 @@ const Reservation = () => {
         setShowModal(!showModal)
 
     }
-    const handleReservation = () => {
-        toggleModal()
-        console.log({ guests, smoking });
+
+    const resetForm = () => {
         setGuests(1)
         setSmoking(false)
         setDate('2016-01-01')
     }
+    const openAlert = () => {
+        Alert.alert(
+            'Your Reservation. Ok ?',
+            'Number of Guests :' + guests + '\n Somking :' + smoking + '\n Date and Time :' + date,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => resetForm(),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Ok',
+                    onPress: () => resetForm()
+
+                }
+            ],
+            { cancelable: false }
+        )
+    }
     return (
         <ScrollView>
-            <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Number of Guests</Text>
-                <Picker
-                    style={styles.formItem}
-                    selectedValue={guests}
-                    onValueChange={(itemValue, itemIndex) => setGuests(itemValue)}>
-                    <Picker.Item label="1" value="1" />
-                    <Picker.Item label="2" value="2" />
-                    <Picker.Item label="3" value="3" />
-                    <Picker.Item label="4" value="4" />
-                    <Picker.Item label="5" value="5" />
-                    <Picker.Item label="6" value="6" />
-                </Picker>
-            </View>
-            <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Smoking/Non-Smoking?</Text>
-                <Switch
-                    style={styles.formItem}
-                    value={smoking}
-                    onTintColor='#512DA8'
-                    onValueChange={(value) => setSmoking(value)}>
-                </Switch>
-            </View>
-            <View style={styles.formRow}>
-                <Text style={styles.formLabel}>Date and Time</Text>
-                {/* <DatePicker
+            <Animatable.View animation='zoomInUp' duration={2000} >
+                <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Number of Guests</Text>
+                    <Picker
+                        style={styles.formItem}
+                        selectedValue={guests}
+                        onValueChange={(itemValue, itemIndex) => setGuests(itemValue)}>
+                        <Picker.Item label="1" value="1" />
+                        <Picker.Item label="2" value="2" />
+                        <Picker.Item label="3" value="3" />
+                        <Picker.Item label="4" value="4" />
+                        <Picker.Item label="5" value="5" />
+                        <Picker.Item label="6" value="6" />
+                    </Picker>
+                </View>
+                <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Smoking/Non-Smoking?</Text>
+                    <Switch
+                        style={styles.formItem}
+                        value={smoking}
+                        onTintColor='#512DA8'
+                        onValueChange={(value) => setSmoking(value)}>
+                    </Switch>
+                </View>
+                <View style={styles.formRow}>
+                    <Text style={styles.formLabel}>Date and Time</Text>
+                    {/* <DatePicker
                     style={{ flex: 2, marginRight: 20 }}
                     date={date}
                     format=''
@@ -72,35 +92,18 @@ const Reservation = () => {
                     }}
                     onDateChange={(date) => setDate(date)}
                 /> */}
-            </View>
-            <View style={styles.formRow}>
-                <Button
-                    onPress={() => handleReservation()}
-                    title="Reserve"
-                    color="#512DA8"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-            </View>
-            <Modal
-                animationType={'slide'}
-                transparent={true}
-                visible={showModal}
-                onDismiss={() => toggleModal()}
-                onRequestClose={() => toggleModal()}
-
-            >
-                <View style={styles.modal}>
-                    <Text style={styles.moadalTitle}>
-                        Your Reservation
-                    </Text>
-                    <Text style={styles.modalText}>
-                        Number of Guests:{guests}
-                    </Text>
-                    <Text style={styles.modalText}>Smoking:{smoking}</Text>
-                    <Text style={styles.modalText}>Date :{date}</Text>
-                    <Button color="#512AD8" title="Close" onPress={() => { toggleModal() }} />
                 </View>
-            </Modal>
+                <View style={styles.formRow}>
+                    <Button
+                        onPress={() => openAlert()}
+                        title="Reserve"
+                        color="#512DA8"
+                        accessibilityLabel="Learn more about this purple button"
+                    />
+                </View>
+            </Animatable.View>
+
+
         </ScrollView>
     )
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Switch, Button, ScrollView, Alert } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { Card } from 'react-native-elements'
-import { DatePicker } from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker'
 import * as Animatable from 'react-native-animatable'
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
@@ -138,29 +138,30 @@ class Reservation extends Component {
                     </View>
                     <View style={styles.formRow}>
                         <Text style={styles.formLabel}>Date and Time</Text>
-                        {/* <DatePicker
-                        style={{ flex: 2, marginRight: 20 }}
-                        date={this.state.date}
-                        format=''
-                        mode="datetime"
-                        placeholder="select date and Time"
-                        minDate="2017-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                            // ... You can check the source to find the other keys. 
-                        }}
-                        onDateChange={(date) => { this.setState({ date: date }) }}
-                    /> */}
+                        <DatePicker
+                            style={{ width: 200 }}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="YYYY-MM-DD"
+                            minDate="2016-05-01"
+                            maxDate="2022-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                },
+                                dateInput: {
+                                    marginLeft: 36
+                                }
+                                // ... You can check the source to find the other keys.
+                            }}
+                            onDateChange={(date) => { this.setState({ date: date }) }}
+                        />
                     </View>
                     <View style={styles.formRow}>
                         <Button

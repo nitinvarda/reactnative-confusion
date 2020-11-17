@@ -5,6 +5,8 @@ import { Card } from 'react-native-elements'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker'
 import * as Animatable from 'react-native-animatable'
+import { Permissions, Notifications } from 'expo'
+
 
 const Reservation = () => {
     const [guests, setGuests] = useState(1)
@@ -12,10 +14,7 @@ const Reservation = () => {
     const [date, setDate] = useState('2016-01-01')
     const [showModal, setShowModal] = useState(false)
 
-    const toggleModal = () => {
-        setShowModal(!showModal)
 
-    }
 
     const resetForm = () => {
         setGuests(1)

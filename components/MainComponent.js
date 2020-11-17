@@ -11,7 +11,7 @@ import ContactComponent from './ContactComponent'
 import { ScrollView, SafeAreaView, View, Text, Image, StyleSheet } from 'react-native'
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import { connect } from 'react-redux'
-import Reservation from './Reservation'
+import Reservation from './ReservationComponent'
 import Favorites from './FavoriteComponent';
 import Login from './LoginComponent'
 

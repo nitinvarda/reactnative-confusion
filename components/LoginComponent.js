@@ -38,6 +38,13 @@ class LoginComponent extends Component {
 
             SecureStore.deleteItemAsync('userinfo')
                 .catch(err => console.log('Could not delete userinfo ', err))
+
+            this.setState({
+                username: '',
+                password: '',
+                remember: false
+
+            })
         }
     }
     static navigationOptions = {

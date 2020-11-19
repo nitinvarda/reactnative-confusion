@@ -53,7 +53,7 @@ class MenuComponent extends Component {
             return (
                 <FlatList data={this.props.dishes.dishes}
                     renderItem={renderMenuItem}
-                    keyExtractor={item => item.id.toString()} />
+                    keyExtractor={item => item._id} />
             )
         }
     }

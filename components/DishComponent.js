@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useRef } from 'react'
 import { FlatList, Modal, ScrollView, Text, View, StyleSheet, Button, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Rating } from 'react-native-elements'
 
@@ -7,119 +7,127 @@ import { baseUrl } from '../shared/baseUrl';
 import { postComment, postFavorite } from '../redux/ActionCreators';
 import { TextInput } from 'react-native-gesture-handler';
 import * as Animatable from 'react-native-animatable'
+import axios from 'axios'
 
 
-const RenderDish = (props) => {
 
-    const dish = props.dish;
+class RenderDish extends Component {
 
     handleViewRef = ref => this.view = ref;
-    const recognizeDrag = ({ moveX, moveY, dy, dx }) => {
-        if (dx < -200) {
-            return true
-        }
-        else {
-            return false
-        }
 
-    }
-    const recognizeComment = ({ dx }) => {
-        if (dx > 200) {
-            return true
-        }
-        else {
-            return false
-        }
-    }
-    const panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: (e, gestureState) => {
-            return true
-        },
-        onPanResponderGrant: () => {
-            this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'))
-        },
-        onPanResponderEnd: (e, gestureState) => {
-            if (recognizeDrag(gestureState)) {
-                Alert.alert(
-                    'Add to Favorites ?',
-                    'Are you sure you want to add' + dish.name + 'to favorites ? ',
-                    [
-                        {
-                            text: 'Cancel',
-                            onPress: () => console.log('Cancel pressed'),
-                            style: 'cancel'
-                        },
-                        {
-                            text: 'Ok',
-                            onPress: () => props.favorite ? console.log('Already favorite') : props.onPress()
 
-                        }
-                    ],
-                    { cancelable: false }
-                )
+    render() {
+
+        const dish = this.props.dish;
+
+
+        const recognizeDrag = ({ moveX, moveY, dy, dx }) => {
+            if (dx < -200) {
+                return true
             }
-            else if (recognizeComment(gestureState)) {
-                props.toggleModal()
+            else {
+                return false
             }
 
-            return true
-
         }
-    })
-    const shareDish = (title, message, url) => {
-        Share.share({
-            title: title,
-            message: title + ': ' + message + ' ' + url,
-            url: url
-        }, {
-            dialogTitle: 'Share ' + title
+        const recognizeComment = ({ dx }) => {
+            if (dx > 200) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (e, gestureState) => {
+                return true
+            },
+            onPanResponderGrant: () => {
+                this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'))
+            },
+            onPanResponderEnd: (e, gestureState) => {
+                if (recognizeDrag(gestureState)) {
+                    Alert.alert(
+                        'Add to Favorites ?',
+                        'Are you sure you want to add' + dish.name + 'to favorites ? ',
+                        [
+                            {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel pressed'),
+                                style: 'cancel'
+                            },
+                            {
+                                text: 'Ok',
+                                onPress: () => this.props.favorite ? console.log('Already favorite') : this.props.onPress()
+
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+                }
+                else if (recognizeComment(gestureState)) {
+                    this.props.toggleModal()
+                }
+
+                return true
+
+            }
         })
-    }
-    if (dish != null) {
-        return (
-            <Animatable.View animation='fadeInDown' duration={2000}
-                ref={this.handleViewRef}
-                {...panResponder.panHandlers}>
-                <Card>
-                    <Card.Title>{dish.name}</Card.Title>
+        const shareDish = (title, message, url) => {
+            Share.share({
+                title: title,
+                message: title + ': ' + message + ' ' + url,
+                url: url
+            }, {
+                dialogTitle: 'Share ' + title
+            })
+        }
+        if (dish != null) {
+            return (
+                <Animatable.View animation='fadeInDown' duration={2000}
+                    ref={this.handleViewRef}
+                    {...panResponder.panHandlers}>
+                    <Card>
+                        <Card.Title>{dish.name}</Card.Title>
 
-                    <Card.Image source={{ uri: baseUrl + dish.image }} />
+                        <Card.Image source={{ uri: baseUrl + dish.image }} />
 
-                    <Text style={{ margin: 10 }}>
-                        {dish.description}
-                    </Text>
-                    <View style={styles.icons}>
+                        <Text style={{ margin: 10 }}>
+                            {dish.description}
+                        </Text>
+                        <View style={styles.icons}>
 
-                        <Icon
-                            raised
-                            reverse
-                            name={props.favorite ? 'heart' : 'heart-o'}
-                            type='font-awesome'
-                            color='#f50'
-                            onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
-                        />
-                        <Icon raised reverse
-                            name='pencil'
-                            type='font-awesome'
-                            color='#51D2A8'
-                            onPress={props.toggleModal} />
-                        <Icon
-                            raised
-                            reverse
-                            name='share'
-                            type='font-awesome'
-                            color='#51D2A8'
-                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
-                        />
-                    </View>
+                            <Icon
+                                raised
+                                reverse
+                                name={this.props.favorite ? 'heart' : 'heart-o'}
+                                type='font-awesome'
+                                color='#f50'
+                                onPress={() => this.props.favorite ? console.log('Already favorite') : this.props.onPress()}
+                            />
+                            <Icon raised reverse
+                                name='pencil'
+                                type='font-awesome'
+                                color='#51D2A8'
+                                onPress={this.props.toggleModal} />
+                            <Icon
+                                raised
+                                reverse
+                                name='share'
+                                type='font-awesome'
+                                color='#51D2A8'
+                                onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
+                            />
+                        </View>
 
 
-                </Card>
-            </Animatable.View>
-        )
-    }
-    else {
-        return (<View></View>)
+                    </Card>
+                </Animatable.View>
+            )
+        }
+        else {
+            return (<View></View>)
+        }
     }
 }
 const RenderComments = (props) => {
@@ -169,11 +177,14 @@ class DishComponent extends Component {
             author: '',
             comment: '',
             rating: 0,
-            favorites: []
+            favorites: [],
+
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.submitHandle = this.submitHandle.bind(this)
     }
+
+
 
     static navigationOptions = {
         title: 'Dish Details'
@@ -201,11 +212,12 @@ class DishComponent extends Component {
             rating: this.state.rating
         }
         this.toggleModal()
-        console.log(Comment)
+
         this.props.postComment(Comment)
     }
     render() {
         const dishId = this.props.navigation.getParam('dishId', '')
+        console.log(dishId)
 
 
         return (
@@ -219,7 +231,10 @@ class DishComponent extends Component {
                     toggleModal={this.toggleModal}
 
                 />
-                <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
+                <View>
+
+                    <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
+                </View>
 
                 <Modal
                     animationType={'slide'}

@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, ToastAndroid, Image } from 'react-native'
 import { Icon, Input, CheckBox, Button } from 'react-native-elements'
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as SecureStore from 'expo-secure-store'
+import * as ImageManipulator from 'expo-image-manipulator';
+import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { baseUrl } from '../shared/baseUrl'
+import { loginUser } from '../redux/ActionCreators'
+import { connect } from 'react-redux'
 
 class LoginTab extends Component {
     constructor(props) {
@@ -16,6 +20,7 @@ class LoginTab extends Component {
             remember: false
         }
     }
+
 
 
     componentDidMount() {
@@ -31,7 +36,7 @@ class LoginTab extends Component {
     }
 
     handleLogin() {
-        console.log(JSON.stringify(this.state))
+
         if (this.state.remember) {
             SecureStore.setItemAsync('userinfo', JSON.stringify({ username: this.state.username, password: this.state.password }))
 
@@ -49,7 +54,13 @@ class LoginTab extends Component {
 
             })
         }
+
+        this.props.login(this.state.username, this.state.password)
     }
+
+
+
+
     static navigationOptions = {
         title: 'Login',
         tabBarIcon: ({ tintColor }) => (
@@ -62,6 +73,7 @@ class LoginTab extends Component {
         )
     }
     render() {
+
         return (
             <View style={styles.container}>
                 <Input
@@ -138,9 +150,36 @@ class RegisterTab extends Component {
 
             })
             if (!captureImage.cancelled) {
-                this.setState({ imageUrl: captureImage.uri })
+                this.processImage(captureImage.uri)
             }
         }
+    }
+    getImageFromGallery = async () => {
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+            let captureImage = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3]
+
+            })
+            if (!captureImage.cancelled) {
+                this.processImage(captureImage.uri)
+            }
+        }
+
+    }
+    processImage = async (imageUri) => {
+        let processedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [
+                { resize: { width: 400 } }
+            ],
+            { format: 'png' }
+
+        );
+        this.setState({ imageUrl: processedImage.uri })
     }
 
     handleRegister() {
@@ -186,6 +225,9 @@ class RegisterTab extends Component {
                         />
                         <Button title='Camera'
                             onPress={this.getImageFromCamera}
+                        />
+                        <Button title='Gallery'
+                            onPress={this.getImageFromGallery}
                         />
                     </View>
                     <Input
@@ -250,9 +292,17 @@ class RegisterTab extends Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    token: state.login.token
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    login: (username, password) => dispatch(loginUser(username, password))
+})
+
 
 const Login = createBottomTabNavigator({
-    Login: LoginTab,
+    Login: connect(mapStateToProps, mapDispatchToProps)(LoginTab),
     Register: RegisterTab
 }, {
     tabBarOptions: {
@@ -262,6 +312,9 @@ const Login = createBottomTabNavigator({
         inactiveTintColor: 'gray'
     }
 })
+
+
+
 
 
 
@@ -276,6 +329,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-around',
         margin: 10
     },
     image: {

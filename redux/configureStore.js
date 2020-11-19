@@ -6,6 +6,7 @@ import { comments } from './comments'
 import { leaders } from './leaders'
 import { promotions } from './promotions'
 import { favorites } from './favourites'
+import { login } from './login'
 import { persistStore, persistReducer } from 'redux-persist'
 // import storage from '@react-native-community/async'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,7 +24,8 @@ export const configureStore = () => {
         comments,
         promotions,
         leaders,
-        favorites
+        favorites,
+        login
 
     })
     const store = createStore(

@@ -1,5 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import axios from 'axios'
 
 
 export const fetchComments = () => (dispatch) => {
@@ -178,3 +179,19 @@ export const deleteFavorite = (dishId) => ({
     type: ActionTypes.DELETE_FAVORITE,
     payload: dishId
 })
+
+
+
+export const loginUser = (email, password) => async (dispatch) => {
+
+    dispatch({ type: ActionTypes.LOGIN_USER_LOADING })
+    try {
+        const response = await axios.post(baseUrl + 'users/signin', { email, password })
+        console.log(response)
+        dispatch({ type: ActionTypes.LOGIN_USER_SUCCESS, payload: response.data.token })
+    }
+    catch (err) {
+        dispatch({ type: ActionTypes.LOGIN_USER_FAILED, payload: err })
+    }
+
+}

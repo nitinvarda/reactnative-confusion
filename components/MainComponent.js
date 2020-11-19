@@ -8,12 +8,15 @@ import { Icon } from 'react-native-elements'
 import HomeComponent from './HomeComponent';
 import AboutComponent from './AboutComponent'
 import ContactComponent from './ContactComponent'
-import { ScrollView, SafeAreaView, View, Text, Image, StyleSheet } from 'react-native'
+import { ScrollView, SafeAreaView, View, Text, Image, StyleSheet, ToastAndroid } from 'react-native'
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 import { connect } from 'react-redux'
 import Reservation from './ReservationComponent'
 import Favorites from './FavoriteComponent';
 import Login from './LoginComponent'
+
+import NetInfo from '@react-native-community/netinfo';
+
 
 const MenuNavigator = createStackNavigator({
     Menu: {
@@ -348,7 +351,46 @@ class Main extends Component {
         this.props.fetchPromos();
         this.props.fetchLeaders();
 
+        // NetInfo.fetch()
+        //     .then(connectionInfo => {
+        //         console.log(connectionInfo)
+        //         ToastAndroid.show('Initial Network Connectivity Type :' +
+        //             connectionInfo.type + ', effectiveType:' + connectionInfo.effectiveType,
+        //             ToastAndroid.LONG
+        //         )
+        //     })
+
+
+
+
+        // NetInfo.addEventListener('connectionChange', this.handleConnectivityChange)
+
+
     }
+    // componentWillUnMount() {
+    //     NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange)
+
+
+    // }
+    // handleConnectivityChange = (connectionInfo) => {
+    //     switch (connectionInfo.type) {
+    //         case 'none':
+    //             ToastAndroid.show('You are now offline !', ToastAndroid.LONG)
+    //             break;
+    //         case 'wifi':
+    //             ToastAndroid.show('You are now connected to WiFi !', ToastAndroid.LONG)
+    //             break;
+    //         case 'cellular':
+    //             ToastAndroid.show('You are now connected to Cellular !', ToastAndroid.LONG)
+    //             break;
+    //         case 'unknown':
+    //             ToastAndroid.show('You are hae an unknown connection !', ToastAndroid.LONG)
+    //             break;
+    //         default:
+    //     }
+    // }
+
+
     render() {
         return (
             <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight }} >

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "confusion-ReEngage",
-    "slug": "confusion-ReEngage",
+    "name": "confusion",
+    "slug": "confusion",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Ristorante_logo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Ristorante_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,14 +17,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "net.food.confusion.confusion",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "package": "net.food.confusion.confusion",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
